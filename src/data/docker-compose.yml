@@ -1,16 +1,28 @@
 services:
-   ldap:
-    image: osixia/openldap:1.5.0
+  ldap:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "10389:389"
       - "10636:636"
     environment:
-      - LDAP_ORGANISATION=Contoso Ltd.
-      - LDAP_DOMAIN=contoso.com
-      - LDAP_ADMIN_PASSWORD=P@ss1W0Rd!
-      - LDAP_CONFIG_PASSWORD=P@ss1W0Rd!
-      - LDAP_READONLY_USER=true
-      - LDAP_READONLY_USER_USERNAME=ldap-ro
-      - LDAP_READONLY_USER_PASSWORD=P@ss1W0Rd!
-#    volumes:
-#      - ./data:/data/ldif
+      - LDAP_ORGANISATION=${LDAP_ORGANIZATION}
+      - LDAP_DOMAIN=${LDAP_DOMAIN}
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - LDAP_CONFIG_PASSWORD=${LDAP_ADMIN_PASSWORD}
+    # healthcheck:
+    #   test: ["CMD", "ldapsearch", "-H", "ldap://localhost:389", "-D", "cn=admin,dc=contoso,dc=org", "-w", "${LDAP_ADMIN_PASSWORD}", "-s", "base", "-b", "dc=contoso,dc=org"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+
+
+  ldapAdmin:
+    image: osixia/phpldapadmin:0.9.0
+    ports:
+      - "8080:80"
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+      - PHPLDAPADMIN_HTTPS=false
+
