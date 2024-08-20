@@ -8,7 +8,7 @@ if [ ! -d dist ]; then
     ./build.sh || exit 1
 fi
 
-VERSION=1.0.0
+VERSION=1.0.1
 NODE_TAG=longday/ldap-stand:${VERSION}
 # Build docker image
 (cd ./dist  \

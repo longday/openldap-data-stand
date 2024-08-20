@@ -118,6 +118,13 @@ for (const row of records) {
           buffer.push(`${key}: ${row[key]},${userBaseDn}`);
         }
         break;
+      case "mail":
+        if (row[key] !== "") {
+          buffer.push(`mail: ${row[key]}`);
+          buffer.push(`sAMAccountname: ${row[key].split("@")[0]}`);
+          buffer.push(`userPrincipalName: ${row[key]}`);
+        }
+        break;
       default:
         buffer.push(`${key}: ${row[key]}`);
         break;
